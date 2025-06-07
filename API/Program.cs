@@ -1,5 +1,7 @@
+using API.Database;
 using API.Helpers;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +18,11 @@ builder.Services.AddCors(opt =>
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi("ProjectV");
 builder.Services.AddRouting();
+
+//DB
+builder.Services.AddDbContext<ProjectVContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSingleton(mapper);
 

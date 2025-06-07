@@ -13,4 +13,10 @@
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
     }
+
+    public class ClientTokenDTO
+    {
+        public Client Client { get; set; } = new Client();
+        public Token Token { get; set; } = new Token();
+    }
 }
