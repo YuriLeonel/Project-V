@@ -3,20 +3,21 @@ import { TextField, Stack, Typography, Button, Box } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
-export default function Login() {
+export default function Signup() {
     const [email, setEmail] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
 
-    const onLogin = async () => {
+    const onSignup = async () => {
         try {
             // TODO: Replace with actual API call
-            // For now, we'll simulate a successful login
+            // For now, we'll simulate a successful signup
             const mockToken = 'mock-token-' + Date.now();
             localStorage.setItem('token', mockToken);
             router.push('/home');
         } catch (error) {
-            console.error('Login failed:', error);
+            console.error('Signup failed:', error);
             // TODO: Add proper error handling
         }
     }
@@ -35,12 +36,17 @@ export default function Login() {
                 maxWidth: '400px',
                 p: 3,
             }}>
-                <Typography variant="h6">Login</Typography>
+                <Typography variant="h6">Cadastro</Typography>
                 <TextField 
                     label="E-mail*" 
                     type="email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}
+                />
+                <TextField 
+                    label="Nome*" 
+                    value={name} 
+                    onChange={(e) => setName(e.target.value)}
                 />
                 <TextField 
                     label="Senha*" 
@@ -51,16 +57,16 @@ export default function Login() {
                 <Button 
                     variant="contained" 
                     color="primary" 
-                    onClick={onLogin}
+                    onClick={onSignup}
                 >
-                    Entrar
+                    Cadastrar
                 </Button>
                 <Button 
                     variant="text" 
                     color="primary" 
-                    onClick={() => router.push('/signup')}
+                    onClick={() => router.push('/login')}
                 >
-                    Não tem uma conta? Cadastre-se
+                    Já tem uma conta? Faça login
                 </Button>
             </Stack>
         </Box>
