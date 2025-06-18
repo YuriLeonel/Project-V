@@ -1,4 +1,6 @@
+import { roboto } from '@/types/theme';
 import type { Metadata } from "next";
+import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -12,9 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={roboto.variable}>
       <body>
-        {children}
+        <ThemeRegistry>
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );
