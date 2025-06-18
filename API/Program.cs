@@ -1,5 +1,8 @@
 using API.Database;
 using API.Helpers;
+using API.Repositories;
+using API.Repositories.Interfaces;
+using API.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +28,12 @@ builder.Services.AddRouting();
 builder.Services.AddDbContext<ProjectVContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSingleton(mapper);
+
+//Repositories
+builder.Services.AddScoped<IClient, ClientRepository>();
+
+//Services
+builder.Services.AddScoped<ClientService>();
 
 var app = builder.Build();
 

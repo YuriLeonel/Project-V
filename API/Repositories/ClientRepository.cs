@@ -1,49 +1,50 @@
 ﻿using API.Database;
-using API.Models.DTO;
+using API.Models;
 using API.Repositories.Interfaces;
-using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
     public class ClientRepository : IClient
     {
         private ProjectVContext _db;
-        private IMapper _mapper;
 
-        public ClientRepository(ProjectVContext db, IMapper mapper)
+        public ClientRepository(ProjectVContext db)
         {
             _db = db;
-            _mapper = mapper;
         }
 
-        public List<ClientDTO> GetAllClients()
+        public List<Client> GetAllClients()
         {
-            throw new NotImplementedException();
+            return [.. _db.Clients];
         }
 
-        public ClientDTO GetClient(int Id)
+        public Client GetClient(int Id)
         {
-            throw new NotImplementedException();
+            return _db.Clients.AsNoTracking().FirstOrDefault(c => c.IdClient == Id);
+        }
+        
+        public Client GetClientByEmail(string Email)
+        {
+            return _db.Clients.AsNoTracking().FirstOrDefault(c => c.Email == Email);
         }
 
-        public ClientDTO PostClient(ClientDTO clientDTO)
+        public void PostClient(Client client)
         {
-            throw new NotImplementedException();
+            _db.Clients.Add(client);
+            _db.SaveChanges();
         }
 
-        public ClientDTO PutClient(ClientDTO clientDTO)
+        public void PatchClient(Client client)
         {
-            throw new NotImplementedException();
+            _db.Clients.Update(client);
+            _db.SaveChanges();
         }
 
-        public void DeleteClient(int Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClientTokenDTO Login(ClientLoginDTO loginDTO)
-        {
-            throw new NotImplementedException();
+        public void DeleteClient(Client client)
+        {         
+            _db.Clients.Remove(client);
+            _db.SaveChanges();
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using API.Models.DTO;
+﻿using API.Models;
 
 namespace API.Repositories.Interfaces
 {
     public interface IClient
     {
-        public List<ClientDTO> GetAllClients();
-        public ClientDTO GetClient(int Id);
-        public ClientDTO PostClient(ClientDTO clientDTO);
-        public ClientDTO PutClient(ClientDTO clientDTO);
-        public void DeleteClient(int Id);
-        public ClientTokenDTO Login (ClientLoginDTO loginDTO);
+        public List<Client> GetAllClients();
+        public Client GetClient(int Id);
+        public Client GetClientByEmail(string Email);
+        public void PostClient(Client client);
+        public void PatchClient(Client client);
+        public void DeleteClient(Client client);
     }
 }
