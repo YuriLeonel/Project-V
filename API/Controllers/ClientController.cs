@@ -14,13 +14,11 @@ namespace API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private ClientService _clientService;
-        private IMapper _mapper;
+        private readonly ClientService _clientService;
 
-        public ClientController(ClientService clientService, IMapper mapper)
+        public ClientController(ClientService clientService)
         {
             _clientService = clientService;
-            _mapper = mapper;
         }
 
         [HttpGet(Name = "GetAllClients")]
@@ -79,10 +77,10 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpGet("login", Name = "Login")]
-        public ActionResult Login([FromBody] ClientLoginDTO loginDTO)
-        {
+        //[HttpGet("login", Name = "Login")]
+        //public ActionResult Login([FromBody] ClientLoginDTO loginDTO)
+        //{
 
-        }
+        //}
     }
 }

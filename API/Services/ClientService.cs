@@ -3,6 +3,7 @@ using API.Models.DTO;
 using API.Models.Requests;
 using API.Models.Responses;
 using API.Repositories;
+using API.Repositories.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
@@ -10,11 +11,11 @@ namespace API.Services
 {
     public class ClientService
     {
-        private ClientRepository _clientRepository;
-        private IMapper _mapper;
+        private readonly IClientRepository _clientRepository;
+        private readonly IMapper _mapper;
         private readonly PasswordHasher<ClientDTO> _hasher = new();
 
-        public ClientService(ClientRepository clientRepository, IMapper mapper)
+        public ClientService(IClientRepository clientRepository, IMapper mapper)
         {
             _clientRepository = clientRepository;
             _mapper = mapper;
@@ -75,6 +76,7 @@ namespace API.Services
                 };
 
             clientDTO.Password = _hasher.HashPassword(clientDTO, clientDTO.Password);
+            clientDTO.CreatedAt = DateTime.Now;
 
             var client = _mapper.Map<ClientDTO, Client>(clientDTO);
 
@@ -103,9 +105,12 @@ namespace API.Services
             var client = new Client
             {
                 IdClient = obj.IdClient,
-                Name = clientDTO.Name ?? obj.Name,
-                Email = clientDTO.Email ?? obj.Email,
+                Name = string.IsNullOrEmpty(clientDTO.Name.Trim()) ? obj.Name : clientDTO.Name,
+                Email = string.IsNullOrEmpty(clientDTO.Email.Trim()) ? obj.Email : clientDTO.Email,
                 Password = obj.Password,
+                CreatedAt = obj.CreatedAt,
+                UpdatedAt = DateTime.Now,
+                ClientType = ((int)clientDTO.ClientType) > 0 && clientDTO.ClientType != obj.ClientType ? clientDTO.ClientType : obj.ClientType,
             };
 
             _clientRepository.PatchClient(client);

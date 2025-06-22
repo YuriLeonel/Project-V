@@ -1,4 +1,6 @@
-﻿namespace API.Models.DTO
+﻿using API.Models.Enums;
+
+namespace API.Models.DTO
 {
     public class ClientDTO
     {
@@ -6,6 +8,9 @@
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public ClientType ClientType { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 
     public class ClientLoginDTO
@@ -16,7 +21,7 @@
 
     public class ClientTokenDTO
     {
-        public Client Client { get; set; } = new Client();
+        public ClientDTO Client { get; set; } = new ClientDTO();
         public Token Token { get; set; } = new Token();
     }
 }

@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Repositories
 {
-    public class ClientRepository : IClient
+    public class ClientRepository : IClientRepository
     {
-        private ProjectVContext _db;
+        private readonly ProjectVContext _db;
 
         public ClientRepository(ProjectVContext db)
         {

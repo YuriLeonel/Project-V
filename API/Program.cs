@@ -30,7 +30,7 @@ builder.Services.AddDbContext<ProjectVContext>(opt => opt.UseSqlServer(builder.C
 builder.Services.AddSingleton(mapper);
 
 //Repositories
-builder.Services.AddScoped<IClient, ClientRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 //Services
 builder.Services.AddScoped<ClientService>();
