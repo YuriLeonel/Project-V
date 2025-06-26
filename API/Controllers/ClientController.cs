@@ -1,11 +1,7 @@
-﻿using API.Models;
-using API.Models.DTO;
+﻿using API.Models.DTO;
 using API.Models.Requests;
-using API.Models.Responses;
-using API.Repositories;
-using API.Repositories.Interfaces;
 using API.Services;
-using AutoMapper;
+using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -14,9 +10,9 @@ namespace API.Controllers
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly ClientService _clientService;
+        private readonly IClientService _clientService;
 
-        public ClientController(ClientService clientService)
+        public ClientController(IClientService clientService)
         {
             _clientService = clientService;
         }

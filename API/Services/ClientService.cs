@@ -4,12 +4,13 @@ using API.Models.Requests;
 using API.Models.Responses;
 using API.Repositories;
 using API.Repositories.Interfaces;
+using API.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 
 namespace API.Services
 {
-    public class ClientService
+    public class ClientService : IClientService
     {
         private readonly IClientRepository _clientRepository;
         private readonly IMapper _mapper;

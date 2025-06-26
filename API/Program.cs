@@ -3,6 +3,7 @@ using API.Helpers;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using API.Services;
+using API.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,7 +34,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
 //Services
-builder.Services.AddScoped<ClientService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 
 var app = builder.Build();
 
