@@ -2,6 +2,7 @@
 using API.Models.DTO;
 using API.Models.Requests;
 using API.Models.Responses;
+using API.Models.Validators;
 using API.Repositories;
 using API.Repositories.Interfaces;
 using API.Services.Interfaces;
@@ -69,6 +70,9 @@ namespace API.Services
 
         public ResponseDefault<ClientDTO> PostClient(ClientDTO clientDTO)
         {
+            var validator = new ClientValidator();
+            var result = validator.Validate(clientDTO);
+
             if (_clientRepository.GetClientByEmail(clientDTO.Email) == null)
                 return new ResponseDefault<ClientDTO>
                 {
@@ -78,6 +82,7 @@ namespace API.Services
 
             clientDTO.Password = _hasher.HashPassword(clientDTO, clientDTO.Password);
             clientDTO.CreatedAt = DateTime.Now;
+            clientDTO.Active = true;
 
             var client = _mapper.Map<ClientDTO, Client>(clientDTO);
 

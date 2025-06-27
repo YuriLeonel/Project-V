@@ -16,6 +16,7 @@ namespace API.Models
 
         public Company Company { get; set; } = new Company();
         public Client Client { get; set; } = new Client();
-        public ICollection<ScheduleServices> ScheduleServices { get; set; } = new List<ScheduleServices>();
+        public ICollection<ScheduleServices> ScheduleServices { get; set; } = [];
+        public ICollection<Reschedule> Reschedules { get; set; } = [];
     }
 }

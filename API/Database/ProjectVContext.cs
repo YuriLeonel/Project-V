@@ -14,6 +14,7 @@ namespace API.Database
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ScheduleServices> ScheduleServices { get; set; }
+        public DbSet<Reschedule> Reschedules { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -65,6 +66,13 @@ namespace API.Database
                 entity.HasOne(ss => ss.Schedule).WithMany(s => s.ScheduleServices).HasForeignKey(ss => ss.IdSchedule).OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(ss => ss.Service).WithMany(s => s.ScheduleServices).HasForeignKey(ss => ss.IdService).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Reschedule>(entity =>
+            {
+                entity.HasKey(r => r.IdReschedule);
+
+                entity.HasOne(r => r.Schedule).WithMany(s => s.Reschedules).HasForeignKey(r => r.IdSchedule).OnDelete(DeleteBehavior.Restrict);
             });
 
             base.OnModelCreating(modelBuilder);

@@ -44,9 +44,17 @@ namespace API.Controllers
         [HttpPost(Name = "PostClient")]
         public ActionResult PostClient([FromBody] ClientDTO clientDTO)
         {
-            _clientService.PostClient(clientDTO);
+            var response = _clientService.PostClient(clientDTO);
 
-            return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = clientDTO.IdClient }, value: clientDTO);
+            switch (response.Status)
+            {
+                default:
+                case 201:
+                    return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = clientDTO.IdClient }, value: clientDTO);
+
+                case 400:
+                    return BadRequest(response);
+            }
         }
 
         [HttpPatch("{Id}", Name = "PatchClient")]

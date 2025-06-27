@@ -40,7 +40,6 @@ namespace API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -48,7 +47,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -112,6 +110,28 @@ namespace API.Migrations
                     b.HasIndex("IdCompany");
 
                     b.ToTable("CompanyClients");
+                });
+
+            modelBuilder.Entity("API.Models.Reschedule", b =>
+                {
+                    b.Property<int>("IdReschedule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdReschedule"));
+
+                    b.Property<int>("IdSchedule")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RescheduleReason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IdReschedule");
+
+                    b.HasIndex("IdSchedule");
+
+                    b.ToTable("Reschedules");
                 });
 
             modelBuilder.Entity("API.Models.Schedule", b =>
@@ -186,6 +206,12 @@ namespace API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdService"));
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -201,6 +227,9 @@ namespace API.Migrations
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("IdService");
 
@@ -237,6 +266,17 @@ namespace API.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("API.Models.Reschedule", b =>
+                {
+                    b.HasOne("API.Models.Schedule", "Schedule")
+                        .WithMany("Reschedules")
+                        .HasForeignKey("IdSchedule")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Schedule");
                 });
 
             modelBuilder.Entity("API.Models.Schedule", b =>
@@ -308,6 +348,8 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.Schedule", b =>
                 {
+                    b.Navigation("Reschedules");
+
                     b.Navigation("ScheduleServices");
                 });
 

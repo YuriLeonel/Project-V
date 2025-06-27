@@ -9,8 +9,8 @@ namespace API.Models.DTO
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public ClientTypeEnum ClientType { get; set; }
-        public DateTime CreatedAt { get; set; }
         public bool Active { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }
 

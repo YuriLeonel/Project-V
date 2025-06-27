@@ -1,6 +1,6 @@
 ﻿namespace API.Models
 {
-    public class Service
+    public class Service: EntityBase
     {
         public int IdService { get; set; }
         public string Name { get; set; } = string.Empty;
@@ -10,6 +10,6 @@
         public int IdEmployee { get; set; }
 
         public Client Employee { get; set; } = new Client();
-        public ICollection<ScheduleServices> ScheduleServices { get; set; } = new List<ScheduleServices>();
+        public ICollection<ScheduleServices> ScheduleServices { get; set; } = [];
     }
 }
