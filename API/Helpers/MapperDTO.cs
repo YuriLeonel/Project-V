@@ -8,8 +8,14 @@ namespace API.Helpers
     {
         public MapperDTO()
         {
+            //Admins/Employees/Clients
             CreateMap<Client, ClientDTO>();
+            CreateMap<Client, CompleteClientDTO>();
+            CreateMap<Client, CompleteAdminDTO>();
+            CreateMap<Client, CompleteEmployeeDTO>();
             CreateMap<ClientDTO, Client>();
+            CreateMap<PostClientDTO, Client>();
+            CreateMap<PostUserDTO, Client>();
         }
     }
 }

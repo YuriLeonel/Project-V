@@ -1,6 +1,5 @@
 ﻿using API.Models.DTO;
 using API.Models.Requests;
-using API.Services;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,7 +41,7 @@ namespace API.Controllers
         }
 
         [HttpPost(Name = "PostClient")]
-        public ActionResult PostClient([FromBody] ClientDTO clientDTO)
+        public ActionResult PostClient([FromBody] PostClientDTO clientDTO)
         {
             var response = _clientService.PostClient(clientDTO);
 
@@ -50,7 +49,7 @@ namespace API.Controllers
             {
                 default:
                 case 201:
-                    return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = clientDTO.IdClient }, value: clientDTO);
+                    return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = response.Data?.IdClient }, value: response.Data);
 
                 case 400:
                     return BadRequest(response);
@@ -58,7 +57,7 @@ namespace API.Controllers
         }
 
         [HttpPatch("{Id}", Name = "PatchClient")]
-        public ActionResult PatchClient([FromRoute] int Id, [FromBody] ClientDTO clientDTO)
+        public ActionResult PatchClient([FromRoute] int Id, [FromBody] PostClientDTO clientDTO)
         {
             var response = _clientService.PatchClient(Id, clientDTO);
 

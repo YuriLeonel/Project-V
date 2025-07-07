@@ -3,13 +3,16 @@ using FluentValidation;
 
 namespace API.Models.Validators
 {
-    public class ClientValidator : AbstractValidator<ClientDTO>
+    public class ClientValidator : AbstractValidator<PostClientDTO>
     {
         public ClientValidator()
         {
-            RuleFor(c => c.Name).NotEmpty();
-            RuleFor(c => c.Email).NotEmpty().When(c => c.ClientType != Enums.ClientTypeEnum.Employee);
-            RuleFor(c => c.Password).NotEmpty().When(c => c.ClientType != Enums.ClientTypeEnum.Employee);
+            RuleFor(c => c.Name).NotEmpty().WithMessage("{PropertyName} is required.")
+                                .MaximumLength(250).WithMessage("Length must be less than 250. Current value is {PropertyValue}");
+            RuleFor(c => c.Email).NotEmpty()/*.When(c => c.ClientType != Enums.ClientTypeEnum.Employee)*/.WithMessage("{PropertyName} is required.");
+            RuleFor(c => c.Password).NotEmpty()/*.When(c => c.ClientType != Enums.ClientTypeEnum.Employee)*/.WithMessage("{PropertyName} is required.");
+            //RuleFor(c => c.ClientType).NotNull().WithMessage("{PropertyName} is required.")
+            //    .IsInEnum().WithMessage("{PropertyName} invalid.");
         }
     }
 }

@@ -7,9 +7,9 @@ namespace API.Services.Interfaces
     public interface IClientService
     {
         public ResponsePaginationDefault<List<ClientDTO>> GetAllClients(UrlQuery query);
-        public ResponseDefault<ClientDTO> GetClient(int Id);
-        public ResponseDefault<ClientDTO> PostClient(ClientDTO clientDTO);
-        public ResponseDefault<ClientDTO> PatchClient(int Id, ClientDTO clientDTO);
+        public ResponseDefault<CompleteClientDTO> GetClient(int Id);
+        public ResponseDefault<ClientDTO> PostClient(PostClientDTO clientDTO);
+        public ResponseDefault<ClientDTO> PatchClient(int Id, PostClientDTO clientDTO);
         public ResponseDefault<ClientDTO> DeleteClient(int Id);
     }
 }
