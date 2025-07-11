@@ -1,11 +1,12 @@
 ﻿using API.Models.DTO;
 using API.Models.Requests;
 using API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Users/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
     {
@@ -16,6 +17,7 @@ namespace API.Controllers
             _clientService = clientService;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetAllClients")]
         public ActionResult GetAllClients([FromQuery] UrlQuery query)
         {
@@ -24,6 +26,7 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("{Id}", Name = "GetClient")]
         public ActionResult GetClient(int Id)
         {
@@ -40,6 +43,7 @@ namespace API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost(Name = "PostClient")]
         public ActionResult PostClient([FromBody] PostClientDTO clientDTO)
         {
@@ -56,6 +60,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPatch("{Id}", Name = "PatchClient")]
         public ActionResult PatchClient([FromRoute] int Id, [FromBody] PostClientDTO clientDTO)
         {
@@ -72,6 +77,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{Id}", Name = "DeleteClient")]
         public ActionResult DeleteClient(int Id)
         {
@@ -79,11 +85,5 @@ namespace API.Controllers
 
             return NoContent();
         }
-
-        //[HttpGet("login", Name = "Login")]
-        //public ActionResult Login([FromBody] ClientLoginDTO loginDTO)
-        //{
-
-        //}
     }
 }

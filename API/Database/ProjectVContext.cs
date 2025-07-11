@@ -15,6 +15,7 @@ namespace API.Database
         public DbSet<Service> Services { get; set; }
         public DbSet<ScheduleServices> ScheduleServices { get; set; }
         public DbSet<Reschedule> Reschedules { get; set; }
+        public DbSet<Token> Tokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -73,6 +74,13 @@ namespace API.Database
                 entity.HasKey(r => r.IdReschedule);
 
                 entity.HasOne(r => r.Schedule).WithMany(s => s.Reschedules).HasForeignKey(r => r.IdSchedule).OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<Token>(entity =>
+            {
+                entity.HasKey(t => t.IdToken);
+
+                entity.HasOne(t => t.Client).WithOne(c => c.Token).HasForeignKey<Token>(t => t.IdClient).OnDelete(DeleteBehavior.Restrict);
             });
 
             base.OnModelCreating(modelBuilder);

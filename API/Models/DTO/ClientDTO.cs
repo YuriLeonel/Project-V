@@ -62,6 +62,6 @@
     public class ClientTokenDTO
     {
         public ClientDTO Client { get; set; } = new ClientDTO();
-        public Token Token { get; set; } = new Token();
+        public TokenDTO Token { get; set; } = new TokenDTO();
     }
 }

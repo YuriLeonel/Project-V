@@ -14,5 +14,6 @@ namespace API.Models
         public ICollection<Service>? ServicesProvides { get; set; }
         public ICollection<Schedule> Schedules { get; set; } = [];
         public ICollection<CompanyClients> CompanyClients { get; set; } = [];
+        public Token Token { get; set; } = new Token();
     }
 }

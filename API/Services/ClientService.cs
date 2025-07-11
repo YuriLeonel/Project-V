@@ -43,7 +43,7 @@ namespace API.Services
             return new ResponsePaginationDefault<List<ClientDTO>>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = clientDTO,
                 Pagination = pagination
             };
@@ -57,15 +57,15 @@ namespace API.Services
                 return new ResponseDefault<CompleteClientDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usuário com código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User with code {Id} not found"]
                 };
 
             var clientDTO = _mapper.Map<Client, CompleteClientDTO>(client);
             return new ResponseDefault<CompleteClientDTO>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = clientDTO
             };
         }
@@ -83,7 +83,7 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 400,
-                    Message = "Erro ao cadastrar usuário",
+                    Message = "Register user failed",
                     Errors = errors,
                 };
             }
@@ -92,8 +92,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 400,
-                    Message = "Usuário já existe",
-                    Errors = [$"Usuário já cadastrado com email {clientDTO.Email}"]
+                    Message = "User already exists",
+                    Errors = [$"User already registered with email {clientDTO.Email}"]
                 };
 
             var client = _mapper.Map<PostClientDTO, Client>(clientDTO);
@@ -110,7 +110,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 201,
-                Message = "Usuário criado",
+                Message = "User registered",
                 Data = clientResponse
             };
         }
@@ -122,8 +122,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usuário com código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User with code {Id} not found"]
                 };
 
             var client = new Client
@@ -146,7 +146,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 200,
-                Message = "Usuário alterado com sucesso",
+                Message = "User changed successsfully",
                 Data = clientResponse
             };
         }
@@ -158,8 +158,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usuário com o código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User with code {Id} not found"]
                 };
 
             _clientRepository.DeleteClient(client);
@@ -167,7 +167,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 204,
-                Message = "Usuário deletado com sucesso"
+                Message = "User deleted successfully"
             };
         }
     }

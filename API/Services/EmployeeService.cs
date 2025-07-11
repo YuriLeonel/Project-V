@@ -13,10 +13,10 @@ namespace API.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private IEmployeeRepository _employeeRepository;
-        private IMapper _mapper;
-        private IValidator<PostUserDTO> _employeeValidator;
-        private PasswordHasher<Client> _hasher = new();
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<PostUserDTO> _employeeValidator;
+        private readonly PasswordHasher<Client> _hasher = new();
 
         public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper, IValidator<PostUserDTO> validator)
         {
@@ -44,7 +44,7 @@ namespace API.Services
             return new ResponsePaginationDefault<List<ClientDTO>>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = employeesDTO,
                 Pagination = pagination
             };
@@ -58,15 +58,15 @@ namespace API.Services
                 return new ResponseDefault<CompleteEmployeeDTO>
                 {
                     Status = 404,
-                    Message = "Funcionário não encontrado",
-                    Errors = [$"Funcionário com código {Id} não encontrado"]
+                    Message = "Employee not found",
+                    Errors = [$"Employee with code {Id} not found"]
                 };
 
             var employeeDTO = _mapper.Map<Client, CompleteEmployeeDTO>(employee);
             return new ResponseDefault<CompleteEmployeeDTO>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = employeeDTO
             };
         }
@@ -92,7 +92,7 @@ namespace API.Services
                     return new ResponseDefault<ClientDTO>
                     {
                         Status = 400,
-                        Message = "Erro ao cadastrar funcionário",
+                        Message = "Register employee failed",
                         Errors = errors,
                     };
                 }
@@ -118,7 +118,7 @@ namespace API.Services
                     return new ResponseDefault<ClientDTO>
                     {
                         Status = 400,
-                        Message = "Erro ao cadastrar funcionário",
+                        Message = "Register employee failed",
                         Errors = errors,
                     };
                 }
@@ -127,8 +127,8 @@ namespace API.Services
                     return new ResponseDefault<ClientDTO>
                     {
                         Status = 400,
-                        Message = "Funcionário já existe",
-                        Errors = [$"Funcionário já cadastrado com email {employeeDTO.Email}"]
+                        Message = "Employee already exists",
+                        Errors = [$"Employee already registered with email {employeeDTO.Email}"]
                     };
 
                 employee = _mapper.Map<PostUserDTO, Client>(employeeDTO);
@@ -146,7 +146,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 201,
-                Message = "Funcionário criado",
+                Message = "Employee registered",
                 Data = employeeResponse
             };
         }
@@ -158,8 +158,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Funcionário não encontrado",
-                    Errors = [$"Funcionário com código {Id} não encontrado"]
+                    Message = "Employee not found",
+                    Errors = [$"Employee with code {Id} not found"]
                 };
 
             var client = new Client
@@ -182,7 +182,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 200,
-                Message = "Funcionário alterado com sucesso",
+                Message = "Employee changed successfully",
                 Data = employeeResponse
             };
         }
@@ -194,8 +194,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Funcionário não encontrado",
-                    Errors = [$"Funcionário com o código {Id} não encontrado"]
+                    Message = "Employee not found",
+                    Errors = [$"Employee with code {Id} not found"]
                 };
 
             _employeeRepository.DeleteEmployee(employee);
@@ -203,7 +203,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 204,
-                Message = "Funcionário deletado com sucesso"
+                Message = "Employee deleted successfully"
             };
         }
     }

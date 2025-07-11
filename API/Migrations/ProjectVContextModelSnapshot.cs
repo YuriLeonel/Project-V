@@ -238,6 +238,35 @@ namespace API.Migrations
                     b.ToTable("Services");
                 });
 
+            modelBuilder.Entity("API.Models.Token", b =>
+                {
+                    b.Property<int>("IdToken")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdToken"));
+
+                    b.Property<DateTime>("Expires_In")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("IdClient")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Refresh_Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Used")
+                        .HasColumnType("bit");
+
+                    b.HasKey("IdToken");
+
+                    b.HasIndex("IdClient")
+                        .IsUnique();
+
+                    b.ToTable("Tokens");
+                });
+
             modelBuilder.Entity("API.Models.Company", b =>
                 {
                     b.HasOne("API.Models.Client", "Owner")
@@ -328,6 +357,17 @@ namespace API.Migrations
                     b.Navigation("Employee");
                 });
 
+            modelBuilder.Entity("API.Models.Token", b =>
+                {
+                    b.HasOne("API.Models.Client", "Client")
+                        .WithOne("Token")
+                        .HasForeignKey("API.Models.Token", "IdClient")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("API.Models.Client", b =>
                 {
                     b.Navigation("CompanyClients");
@@ -337,6 +377,9 @@ namespace API.Migrations
                     b.Navigation("Schedules");
 
                     b.Navigation("ServicesProvides");
+
+                    b.Navigation("Token")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("API.Models.Company", b =>

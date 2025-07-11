@@ -2,7 +2,6 @@
 using API.Models.DTO;
 using API.Models.Requests;
 using API.Models.Responses;
-using API.Repositories;
 using API.Repositories.Interfaces;
 using API.Services.Interfaces;
 using AutoMapper;
@@ -13,10 +12,10 @@ namespace API.Services
 {
     public class AdminService : IAdminService
     {
-        private IAdminRepository _adminRepository;
-        private IMapper _mapper;
-        private IValidator<PostUserDTO> _adminValidator;
-        private PasswordHasher<Client> _hasher = new();
+        private readonly IAdminRepository _adminRepository;
+        private readonly IMapper _mapper;
+        private readonly IValidator<PostUserDTO> _adminValidator;
+        private readonly PasswordHasher<Client> _hasher = new();        
 
         public AdminService(IAdminRepository adminRepository, IMapper mapper, IValidator<PostUserDTO> validator)
         {
@@ -44,7 +43,7 @@ namespace API.Services
             return new ResponsePaginationDefault<List<ClientDTO>>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = adminDTO,
                 Pagination = pagination
             };
@@ -58,15 +57,15 @@ namespace API.Services
                 return new ResponseDefault<CompleteAdminDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usuário com código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User with code {Id} not found"]
                 };
 
             var adminDTO = _mapper.Map<Client, CompleteAdminDTO>(admin);
             return new ResponseDefault<CompleteAdminDTO>
             {
                 Status = 200,
-                Message = "Sucesso",
+                Message = "Success",
                 Data = adminDTO
             };
         }
@@ -84,7 +83,7 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 400,
-                    Message = "Erro ao cadastrar funcionário",
+                    Message = "Register user failed",
                     Errors = errors,
                 };
             }
@@ -93,8 +92,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 400,
-                    Message = "Usuário já existe",
-                    Errors = [$"Usário já cadastrado com email {adminDTO.Email}"]
+                    Message = "User already exists",
+                    Errors = [$"User already registered with email {adminDTO.Email}"]
                 };
 
             var admin = _mapper.Map<PostUserDTO, Client>(adminDTO);
@@ -111,7 +110,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 201,
-                Message = "Usuário criado",
+                Message = "User registered",
                 Data = adminResponse
             };
         }
@@ -123,8 +122,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usário com código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User witth code {Id} not found"]
                 };
 
             var client = new Client
@@ -147,7 +146,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 200,
-                Message = "Usuário alterado com sucesso",
+                Message = "User changed successfully",
                 Data = adminResponse
             };
         }
@@ -159,8 +158,8 @@ namespace API.Services
                 return new ResponseDefault<ClientDTO>
                 {
                     Status = 404,
-                    Message = "Usuário não encontrado",
-                    Errors = [$"Usuário com o código {Id} não encontrado"]
+                    Message = "User not found",
+                    Errors = [$"User with code {Id} not found"]
                 };
 
             _adminRepository.DeleteAdmin(admin);
@@ -168,7 +167,7 @@ namespace API.Services
             return new ResponseDefault<ClientDTO>
             {
                 Status = 204,
-                Message = "Usuário deletado com sucesso"
+                Message = "User deleted successfully"
             };
         }
     }

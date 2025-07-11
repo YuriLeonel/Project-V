@@ -16,6 +16,7 @@ namespace API.Helpers
             CreateMap<ClientDTO, Client>();
             CreateMap<PostClientDTO, Client>();
             CreateMap<PostUserDTO, Client>();
+            CreateMap<ClientLoginDTO, PostClientDTO>();
         }
     }
 }
