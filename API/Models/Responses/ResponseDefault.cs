@@ -5,6 +5,7 @@
         public T? Data { get; set; }
         public int Status { get; set; }
         public string Message { get; set; } = string.Empty;
+        public ICollection<string>? Errors { get; set; }
     }
 
     public class ResponsePaginationDefault<T> : ResponseDefault<T>

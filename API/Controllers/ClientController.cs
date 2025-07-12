@@ -1,26 +1,23 @@
-﻿using API.Models;
-using API.Models.DTO;
+﻿using API.Models.DTO;
 using API.Models.Requests;
-using API.Models.Responses;
-using API.Repositories;
-using API.Repositories.Interfaces;
-using API.Services;
-using AutoMapper;
+using API.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Users/[controller]")]
     [ApiController]
     public class ClientController : ControllerBase
     {
-        private readonly ClientService _clientService;
+        private readonly IClientService _clientService;
 
-        public ClientController(ClientService clientService)
+        public ClientController(IClientService clientService)
         {
             _clientService = clientService;
         }
 
+        [Authorize]
         [HttpGet(Name = "GetAllClients")]
         public ActionResult GetAllClients([FromQuery] UrlQuery query)
         {
@@ -29,6 +26,7 @@ namespace API.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpGet("{Id}", Name = "GetClient")]
         public ActionResult GetClient(int Id)
         {
@@ -45,16 +43,26 @@ namespace API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost(Name = "PostClient")]
-        public ActionResult PostClient([FromBody] ClientDTO clientDTO)
+        public ActionResult PostClient([FromBody] PostClientDTO clientDTO)
         {
-            _clientService.PostClient(clientDTO);
+            var response = _clientService.PostClient(clientDTO);
 
-            return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = clientDTO.IdClient }, value: clientDTO);
+            switch (response.Status)
+            {
+                default:
+                case 201:
+                    return CreatedAtRoute(routeName: "GetClient", routeValues: new { Id = response.Data?.IdClient }, value: response.Data);
+
+                case 400:
+                    return BadRequest(response);
+            }
         }
 
+        [Authorize]
         [HttpPatch("{Id}", Name = "PatchClient")]
-        public ActionResult PatchClient([FromRoute] int Id, [FromBody] ClientDTO clientDTO)
+        public ActionResult PatchClient([FromRoute] int Id, [FromBody] PostClientDTO clientDTO)
         {
             var response = _clientService.PatchClient(Id, clientDTO);
 
@@ -69,6 +77,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{Id}", Name = "DeleteClient")]
         public ActionResult DeleteClient(int Id)
         {
@@ -76,11 +85,5 @@ namespace API.Controllers
 
             return NoContent();
         }
-
-        //[HttpGet("login", Name = "Login")]
-        //public ActionResult Login([FromBody] ClientLoginDTO loginDTO)
-        //{
-
-        //}
     }
 }
