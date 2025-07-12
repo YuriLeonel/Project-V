@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import SessionCard from './components/SessionCard';
+import SessionCard from '@/components/SessionCard/SessionCard';
 
 export default function Home() {
   const router = useRouter();
@@ -34,7 +34,7 @@ export default function Home() {
             Schedule Smarter, Not Harder
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose the perfect scheduling solution for your needs. Whether you're managing personal appointments or coordinating enterprise-wide schedules, we've got you covered.
+            Choose the perfect scheduling solution for your needs. Whether you&apos;re managing personal appointments or coordinating enterprise-wide schedules, we&apos;ve got you covered.
           </p>
         </div>
 

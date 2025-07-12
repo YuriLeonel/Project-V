@@ -1,23 +1,62 @@
 'use client';
-import { TextField, Stack, Typography, Button, Box } from "@mui/material";
-import { useState } from "react";
+import { TextField, Stack, Typography, Button, Box, Alert } from "@mui/material";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
-export default function Login() {
+// Loading component
+const LoadingSpinner = () => (
+  <Box sx={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+  }}>
+    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+  </Box>
+);
+
+// Inner login component
+const LoginInner = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const { login, error, user, loading } = useAuth();
+
+    // Get the intended client type from localStorage (set from home page)
+    const [clientType, setClientType] = useState<'personal' | 'enterprise'>('personal');
+
+    useEffect(() => {
+        const selectedType = localStorage.getItem('selectedSessionType') as 'personal' | 'enterprise';
+        if (selectedType) {
+            setClientType(selectedType);
+        }
+    }, []);
+
+    // Don't render the form if user is authenticated - let AuthProvider handle redirect
+    if (user && !loading) {
+        return <LoadingSpinner />;
+    }
 
     const onLogin = async () => {
+        if (!email || !password) {
+            return;
+        }
+
+        setIsLoading(true);
         try {
-            // TODO: Replace with actual API call
-            // For now, we'll simulate a successful login
-            const mockToken = 'mock-token-' + Date.now();
-            localStorage.setItem('token', mockToken);
-            router.push('/home');
+            const success = await login(email, password);
+            if (success) {
+                // Remove the stored session type as it's no longer needed
+                localStorage.removeItem('selectedSessionType');
+                // AuthProvider will handle the redirect
+            }
         } catch (error) {
             console.error('Login failed:', error);
-            // TODO: Add proper error handling
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -35,25 +74,37 @@ export default function Login() {
                 maxWidth: '400px',
                 p: 3,
             }}>
-                <Typography variant="h6">Login</Typography>
+                <Typography variant="h6">
+                    Login - {clientType === 'personal' ? 'Pessoal' : 'Empresarial'}
+                </Typography>
+                
+                {error && (
+                    <Alert severity="error">{error}</Alert>
+                )}
+                
                 <TextField 
-                    label="E-mail*" 
+                    label="E-mail" 
                     type="email" 
                     value={email} 
                     onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
+                    required
                 />
                 <TextField 
-                    label="Senha*" 
+                    label="Senha" 
                     type="password" 
                     value={password} 
                     onChange={(e) => setPassword(e.target.value)}
+                    disabled={isLoading}
+                    required
                 />
                 <Button 
                     variant="contained" 
                     color="primary" 
                     onClick={onLogin}
+                    disabled={isLoading || !email || !password}
                 >
-                    Entrar
+                    {isLoading ? 'Entrando...' : 'Entrar'}
                 </Button>
                 <Button 
                     variant="text" 
@@ -62,7 +113,24 @@ export default function Login() {
                 >
                     Não tem uma conta? Cadastre-se
                 </Button>
+                <Button 
+                    variant="text" 
+                    color="secondary" 
+                    onClick={() => router.push('/')}
+                    size="small"
+                >
+                    Voltar ao início
+                </Button>
             </Stack>
         </Box>
+    );
+}
+
+// Main login component with Suspense wrapper
+export default function Login() {
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <LoginInner />
+        </Suspense>
     );
 } 

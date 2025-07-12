@@ -5,12 +5,14 @@
 Welcome to Project V! This repository is designed to showcase my expertise as a frontend developer, highlighting my technical skills in **React.js**, **Next.js**, **TypeScript**, and **Tailwind CSS**. It’s a well-structured, fully responsive web application that follows best practices in code organization, reusability, and design principles.
 
 ### 🎯 Objectives
+
 - Demonstrate technical skills in modern frontend frameworks and libraries.
 - Showcase my ability to build accessible and responsive UI components.
 - Illustrate knowledge in creating maintainable and scalable codebases.
 - Highlight soft skills, including collaboration, communication, and problem-solving.
 
 ## 🛠️ Tech Stack
+
 - **React.js** - A robust library for building fast, responsive UIs.
 - **Next.js** - A React framework with powerful features like SSR (Server-Side Rendering) and SSG (Static Site Generation) for optimized performance.
 - **TypeScript** - Adds static typing to JavaScript, enhancing code quality and readability.
@@ -23,6 +25,8 @@ Welcome to Project V! This repository is designed to showcase my expertise as a 
 - **Dark Mode Support**: Built-in dark and light mode themes for better user experience.
 - **Optimized Performance**: Performance-focused optimizations to improve loading times and responsiveness.
 - **Accessibility (a11y)**: Following WAI-ARIA standards to ensure the app is accessible to all users.
+- **API Integration**: Full integration with .NET Core API for client management and authentication.
+- **TypeScript Support**: Full TypeScript implementation for better type safety and developer experience.
 
 ## 📁 Project Structure
 
@@ -46,36 +50,71 @@ The project follows a modular structure, designed to keep the codebase clean and
 ```
 
 ## 📋 Installation and Usage
+
 ### Prerequisites
-- [Node.js](https://nodejs.org/) (v14+)
+
+- [Node.js](https://nodejs.org/) (v18+)
 - [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
+- .NET Core API running on `https://localhost:7146` (from the API project in this repository)
 
 ### Steps
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/YuriLeonel/Project-V.git
    cd Project-V/client
 
+   ```
+
 2. **Install dependencies**:
-    ```bash
-    npm install
-3. **Start the development server**:
-    ```bash
-    npm start
-4. **Build for production**:
-    ```bash
-    npm run build
---- 
+
+   ```bash
+   npm install
+
+   ```
+
+3. **Environment Configuration**:
+   The client is configured to connect to the .NET API at `https://localhost:7146/api` by default.
+   To modify the API URL, create a `.env.local` file:
+
+   ```bash
+   NEXT_PUBLIC_API_URL=https://localhost:7146/api
+   ```
+
+4. **Start the API server**:
+   Before running the client, make sure the .NET API is running:
+
+   ```bash
+   cd ../API
+   dotnet run
+   ```
+
+5. **Start the development server**:
+
+   ```bash
+   npm run dev
+
+   ```
+
+6. **Build for production**:
+   ```bash
+   npm run build
+   ```
+
+---
 
 ## 🧠 Soft Skills
+
 - Collaboration: Successfully worked with cross-functional teams to ensure cohesive, high-quality outputs.
 - Communication: Effectively convey complex technical concepts to diverse audiences.
 - Problem-Solving: Adapted to various challenges, implementing clean, efficient, and reusable solutions.
 - Adaptability: Kept up-to-date with industry trends, bringing best practices into projects.
 
 ## 👥 Contributing
+
 If you’d like to contribute to this project or give feedback, please open a pull request or an issue. Let's build better, together!
 
 ## 📝 License
+
 This project is licensed under the MIT License.
