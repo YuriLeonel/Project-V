@@ -15,7 +15,7 @@ namespace API.Repositories
 
         public List<Client> GetAllAdmins()
         {
-            return [.. _db.Clients.Where(a => a.ClientType == Models.Enums.ClientTypeEnum.Admin || a.ClientType == Models.Enums.ClientTypeEnum.Owner)];
+            return [.. _db.Clients.AsNoTracking().Where(a => a.ClientType == Models.Enums.ClientTypeEnum.Admin || a.ClientType == Models.Enums.ClientTypeEnum.Owner)];
         }
 
         public Client GetAdmin(int Id)
@@ -25,13 +25,17 @@ namespace API.Repositories
 
         public Client GetCompleteAdmin(int Id)
         {
-            var admin = _db.Clients.AsNoTracking().FirstOrDefault(a => (a.ClientType == Models.Enums.ClientTypeEnum.Admin || a.ClientType == Models.Enums.ClientTypeEnum.Owner) && a.IdClient == Id);
+            //var admin = _db.Clients.AsNoTracking().FirstOrDefault(a => (a.ClientType == Models.Enums.ClientTypeEnum.Admin || a.ClientType == Models.Enums.ClientTypeEnum.Owner) && a.IdClient == Id);
+            var admin = GetAdmin(Id);
 
             //Fill admin's company
             //Search owner's company
             if (admin != null)
             {
+                admin.CompanyClients = [.. _db.CompanyClients.AsNoTracking().Where(cc => cc.IdClient == admin.IdClient)];
 
+                if (admin.ClientType == Models.Enums.ClientTypeEnum.Owner)
+                    admin.OwnedCompany = _db.Companies.AsNoTracking().FirstOrDefault(c => c.IdOwner == admin.IdClient);
             }
 
             return admin;
@@ -66,6 +70,7 @@ namespace API.Repositories
             }
             else
             {
+                _db.CompanyClients.RemoveRange(_db.CompanyClients.Where(cc => cc.IdClient == admin.IdClient));
                 _db.Clients.Remove(admin);
                 _db.SaveChanges();
             }

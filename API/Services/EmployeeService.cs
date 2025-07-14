@@ -14,15 +14,17 @@ namespace API.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<PostUserDTO> _employeeValidator;
         private readonly PasswordHasher<Client> _hasher = new();
 
-        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper, IValidator<PostUserDTO> validator)
+        public EmployeeService(IEmployeeRepository employeeRepository, IMapper mapper, IValidator<PostUserDTO> validator, ICompanyRepository companyRepository)
         {
             _employeeRepository = employeeRepository;
             _mapper = mapper;
             _employeeValidator = validator;
+            _companyRepository = companyRepository;
         }
 
         public ResponsePaginationDefault<List<ClientDTO>> GetAllEmployees(UrlQuery query)
@@ -97,6 +99,15 @@ namespace API.Services
                     };
                 }
 
+                foreach (var id in employeeDTO.CompanyId)
+                    if (_companyRepository.GetCompany(id) == null)
+                        return new ResponseDefault<ClientDTO>
+                        {
+                            Status = 400,
+                            Message = "Company not found",
+                            Errors = [$"Company {id} not found"]
+                        };
+
                 employee = _mapper.Map<PostUserDTO, Client>(employeeDTO);
 
                 employee.Active = true;
@@ -131,6 +142,15 @@ namespace API.Services
                         Errors = [$"Employee already registered with email {employeeDTO.Email}"]
                     };
 
+                foreach (var id in employeeDTO.CompanyId)
+                    if (_companyRepository.GetCompany(id) == null)
+                        return new ResponseDefault<ClientDTO>
+                        {
+                            Status = 400,
+                            Message = "Company not found",
+                            Errors = [$"Company {id} not found"]
+                        };
+
                 employee = _mapper.Map<PostUserDTO, Client>(employeeDTO);
 
                 employee.Password = _hasher.HashPassword(employee, employee.Password);
@@ -140,6 +160,7 @@ namespace API.Services
             }
 
             _employeeRepository.PostEmployee(employee);
+            _companyRepository.PostCompanyClient(employee.IdClient, employeeDTO.CompanyId);
 
             var employeeResponse = _mapper.Map<Client, ClientDTO>(employee);
 
@@ -162,6 +183,15 @@ namespace API.Services
                     Errors = [$"Employee with code {Id} not found"]
                 };
 
+            foreach (var id in employeeDTO.CompanyId)
+                if (_companyRepository.GetCompany(id) == null)
+                    return new ResponseDefault<ClientDTO>
+                    {
+                        Status = 400,
+                        Message = "Company not found",
+                        Errors = [$"Company {id} not found"]
+                    };
+
             var client = new Client
             {
                 IdClient = obj.IdClient,
@@ -176,6 +206,7 @@ namespace API.Services
             client.Password = string.IsNullOrEmpty(employeeDTO.Password.Trim()) ? obj.Password : _hasher.HashPassword(client, employeeDTO.Password);
 
             _employeeRepository.PatchEmployee(client);
+            _companyRepository.PatchCompanyClient(client.IdClient, employeeDTO.CompanyId);
 
             var employeeResponse = _mapper.Map<Client, ClientDTO>(client);
 

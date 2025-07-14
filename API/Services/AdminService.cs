@@ -13,15 +13,17 @@ namespace API.Services
     public class AdminService : IAdminService
     {
         private readonly IAdminRepository _adminRepository;
+        private readonly ICompanyRepository _companyRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<PostUserDTO> _adminValidator;
         private readonly PasswordHasher<Client> _hasher = new();        
 
-        public AdminService(IAdminRepository adminRepository, IMapper mapper, IValidator<PostUserDTO> validator)
+        public AdminService(IAdminRepository adminRepository, IMapper mapper, IValidator<PostUserDTO> validator, ICompanyRepository companyRepository)
         {
             _adminRepository = adminRepository;
             _mapper = mapper;
             _adminValidator = validator;
+            _companyRepository = companyRepository;
         }
 
         public ResponsePaginationDefault<List<ClientDTO>> GetAllAdmins(UrlQuery query)
@@ -96,6 +98,15 @@ namespace API.Services
                     Errors = [$"User already registered with email {adminDTO.Email}"]
                 };
 
+            foreach (var id in adminDTO.CompanyId)
+                if (_companyRepository.GetCompany(id) == null)
+                    return new ResponseDefault<ClientDTO>
+                    {
+                        Status = 400,
+                        Message = "Company not found",
+                        Errors = [$"Company with code {id} not found"]
+                    };
+
             var admin = _mapper.Map<PostUserDTO, Client>(adminDTO);
 
             admin.Password = _hasher.HashPassword(admin, admin.Password);
@@ -104,6 +115,7 @@ namespace API.Services
             admin.ClientType = Models.Enums.ClientTypeEnum.Admin;
 
             _adminRepository.PostAdmin(admin);
+            _companyRepository.PostCompanyClient(admin.IdClient, adminDTO.CompanyId);
 
             var adminResponse = _mapper.Map<Client, ClientDTO>(admin);
 
@@ -126,6 +138,15 @@ namespace API.Services
                     Errors = [$"User witth code {Id} not found"]
                 };
 
+            foreach (var id in adminDTO.CompanyId)
+                if (_companyRepository.GetCompany(id) == null)
+                    return new ResponseDefault<ClientDTO>
+                    {
+                        Status = 400,
+                        Message = "Company not found",
+                        Errors = [$"Company with code {id} not found"]
+                    };
+
             var client = new Client
             {
                 IdClient = obj.IdClient,
@@ -140,6 +161,7 @@ namespace API.Services
             client.Password = string.IsNullOrEmpty(adminDTO.Password.Trim()) ? obj.Password : _hasher.HashPassword(client, adminDTO.Password);
 
             _adminRepository.PatchAdmin(client);
+            _companyRepository.PatchCompanyClient(client.IdClient, adminDTO.CompanyId);
 
             var adminResponse = _mapper.Map<Client, ClientDTO>(client);
 

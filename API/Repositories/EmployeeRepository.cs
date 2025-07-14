@@ -15,7 +15,7 @@ namespace API.Repositories
 
         public List<Client> GetAllEmployees()
         {
-            return [.. _db.Clients.Where(e => e.ClientType == Models.Enums.ClientTypeEnum.Employee)];
+            return [.. _db.Clients.AsNoTracking().Where(e => e.ClientType == Models.Enums.ClientTypeEnum.Employee)];
         }
 
         public Client GetEmployee(int Id)
@@ -25,13 +25,15 @@ namespace API.Repositories
 
         public Client GetCompleteEmployee(int Id)
         {
-            var employee = _db.Clients.AsNoTracking().FirstOrDefault(e => e.ClientType == Models.Enums.ClientTypeEnum.Employee && e.IdClient == Id);
+            //var employee = _db.Clients.AsNoTracking().FirstOrDefault(e => e.ClientType == Models.Enums.ClientTypeEnum.Employee && e.IdClient == Id);
+            var employee = GetEmployee(Id);
 
             //Fill employee's services
             //Fill employee's company
             if (employee != null)
             {
-
+                employee.ServicesProvides = [.. _db.Services.AsNoTracking().Where(s => s.IdEmployee == employee.IdClient)];
+                employee.CompanyClients = [.. _db.CompanyClients.AsNoTracking().Where(cc => cc.IdClient == employee.IdClient)];
             }
 
             return employee;
@@ -66,6 +68,7 @@ namespace API.Repositories
             }
             else
             {
+                _db.CompanyClients.RemoveRange(_db.CompanyClients.Where(cc => cc.IdClient == employee.IdClient));
                 _db.Clients.Remove(employee);
                 _db.SaveChanges();
             }

@@ -87,20 +87,23 @@ builder.Services.AddDbContext<ProjectVContext>(opt => opt.UseSqlServer(builder.C
 builder.Services.AddSingleton(mapper);
 
 //Repositories
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IAdminRepository, AdminRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
-builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 
 //Services
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<IClientService, ClientService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 //Validators
 builder.Services.AddScoped<IValidator<PostClientDTO>, ClientValidator>();
 builder.Services.AddScoped<IValidator<PostUserDTO>, AdminValidator>();
+builder.Services.AddScoped<IValidator<PostCompanyDTO>, CompanyValidator>();
 
 //Midllewares
 builder.Services.AddScoped<TokenService>();

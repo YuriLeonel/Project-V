@@ -18,6 +18,7 @@ namespace API.Repositories
         {
             var token = _db.Tokens.AsNoTracking().FirstOrDefault(t => t.Refresh_Token == refreshToken);
 
+            //Fill token's client
             if (token != null)
                 token.Client = _db.Clients.AsNoTracking().FirstOrDefault(c => c.IdClient == token.IdClient);
 

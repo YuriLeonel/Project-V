@@ -16,23 +16,22 @@ namespace API.Repositories
 
         public List<Client> GetAllClients()
         {
-            return [.. _db.Clients.Where(c => c.ClientType == Models.Enums.ClientTypeEnum.Client)];
+            return [.. _db.Clients.AsNoTracking().Where(c => c.ClientType == Models.Enums.ClientTypeEnum.Client)];
         }
 
         public Client GetClient(int Id)
         {
-            return _db.Clients.AsNoTracking().FirstOrDefault(c => c.ClientType == Models.Enums.ClientTypeEnum.Client && c.IdClient == Id);            
+            return _db.Clients.AsNoTracking().FirstOrDefault(c => c.ClientType == Models.Enums.ClientTypeEnum.Client && c.IdClient == Id);
         }
-        
+
         public Client GetCompleteClient(int Id)
         {
-            var client = _db.Clients.AsNoTracking().FirstOrDefault(c => c.ClientType == Models.Enums.ClientTypeEnum.Client && c.IdClient == Id);            
+            //var client = _db.Clients.AsNoTracking().FirstOrDefault(c => c.ClientType == Models.Enums.ClientTypeEnum.Client && c.IdClient == Id);
+            var client = GetClient(Id);
 
             //Fill client's schedule from requisition date
-            if(client != null)
-            {
-
-            }
+            if (client != null)
+                client.Schedules = [.. _db.Schedules.AsNoTracking().Where(s => s.IdClient == client.IdClient && s.BookedtAt >= DateTime.UtcNow)];
 
             return client;
         }
