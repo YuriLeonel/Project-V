@@ -1,6 +1,7 @@
 import { roboto } from '@/types/theme';
 import type { Metadata } from "next";
 import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
+import AuthProvider from '@/components/AuthProvider/AuthProvider';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
     <html lang="en" className={roboto.variable}>
       <body>
         <ThemeRegistry>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </ThemeRegistry>
       </body>
     </html>

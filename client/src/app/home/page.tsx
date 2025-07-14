@@ -2,17 +2,19 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function HomePage() {
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    // Check if user is authenticated
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login');
+    if (!loading) {
+      if (!user) {
+        router.push('/login');
+      }
     }
-  }, [router]);
+  }, [user, loading, router]);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
