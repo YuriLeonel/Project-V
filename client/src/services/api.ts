@@ -1,9 +1,8 @@
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7146/api';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:7111/api';
 
 // Response types
 interface ApiResponse<T = unknown> {
-  success: boolean;
   data?: T;
   message?: string;
   errors?: string[];
@@ -59,7 +58,6 @@ const apiRequest = async <T = unknown>(
 
     if (!response.ok) {
       return {
-        success: false,
         status: response.status,
         message: data?.message || data || `HTTP error! status: ${response.status}`,
         errors: data?.errors || [],
@@ -67,14 +65,12 @@ const apiRequest = async <T = unknown>(
     }
 
     return {
-      success: true,
       data,
       status: response.status,
     };
   } catch (error) {
     console.error('API Request failed:', error);
     return {
-      success: false,
       message: error instanceof Error ? error.message : 'Network error occurred',
     };
   }

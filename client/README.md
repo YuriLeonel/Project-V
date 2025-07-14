@@ -55,7 +55,7 @@ The project follows a modular structure, designed to keep the codebase clean and
 
 - [Node.js](https://nodejs.org/) (v18+)
 - [npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)
-- .NET Core API running on `https://localhost:7146` (from the API project in this repository)
+- .NET Core API running on `https://localhost:7111` (from the API project in this repository)
 
 ### Steps
 
@@ -75,11 +75,11 @@ The project follows a modular structure, designed to keep the codebase clean and
    ```
 
 3. **Environment Configuration**:
-   The client is configured to connect to the .NET API at `https://localhost:7146/api` by default.
+   The client is configured to connect to the .NET API at `https://localhost:7111/api` by default.
    To modify the API URL, create a `.env.local` file:
 
    ```bash
-   NEXT_PUBLIC_API_URL=https://localhost:7146/api
+   NEXT_PUBLIC_API_URL=https://localhost:7111/api
    ```
 
 4. **Start the API server**:
